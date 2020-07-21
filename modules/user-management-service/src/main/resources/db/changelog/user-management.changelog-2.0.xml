@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+            http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet author="${user-management-author}" id="${user-management-changelog-id-prefix}2.0">
+        <insert tableName="permissions">
+            <column name="name">View</column>
+            <column name="description">Read only permission</column>
+        </insert>
+        <insert tableName="permissions">
+            <column name="name">Edit</column>
+            <column name="description">Write permission</column>
+        </insert>
+        <insert tableName="roles">
+            <column name="name">Admin</column>
+            <column name="description">Administrative Role</column>
+        </insert>
+        <insert tableName="roles">
+            <column name="name">Finance</column>
+            <column name="description">Finance Role</column>
+        </insert>
+        <insert tableName="role_permissions">
+            <column name="role_id" valueComputed="select id from roles where name = 'Admin' " />
+            <column name="permission_id" valueComputed="select id from permissions where name = 'View'" />
+        </insert>
+        <insert tableName="role_permissions">
+            <column name="role_id" valueComputed="select id from roles where name = 'Admin' " />
+            <column name="permission_id" valueComputed="select id from permissions where name = 'Edit'" />
+        </insert>
+        <insert tableName="role_permissions">
+            <column name="role_id" valueComputed="select id from roles where name = 'Finance' " />
+            <column name="permission_id" valueComputed="select id from permissions where name = 'View'" />
+        </insert>
+        <insert tableName="users">
+            <column name="username">adminUser@myproject.com</column>
+            <column name="password">$2a$10$GnT/YdJpgb0jUi0NbouLpOIwlPrKXYebQMbvX0PK/gWi./7k3kYYm</column>
+        </insert>
+        <insert tableName="users">
+            <column name="username">financeUser@myproject.com</column>
+            <column name="password">$2a$10$3eZkF6Q4LVE51Qxq0HFtnem7OthZRzSeIr1laeSmRXaqWMLJUstWm</column>
+        </insert>
+        <insert tableName="users">
+            <column name="username">commonUser@myproject.com</column>
+            <column name="password">$2a$10$lWhGHyDTGpCdReXI.PgOSOEO5d3AXnCiFk83tWP8OPlDHog67e8fK</column>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" valueComputed="select id from users where username = 'adminUser@myproject.com' " />
+            <column name="role_id" valueComputed="select id from roles where name = 'Admin'" />
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" valueComputed="select id from users where username = 'financeUser@myproject.com' " />
+            <column name="role_id" valueComputed="select id from roles where name = 'Finance'" />
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" valueComputed="select id from users where username = 'commonUser@myproject.com' " />
+            <column name="role_id" valueComputed="select id from roles where name = 'Admin'" />
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" valueComputed="select id from users where username = 'commonUser@myproject.com' " />
+            <column name="role_id" valueComputed="select id from roles where name = 'Finance'" />
+        </insert>
+    </changeSet>
+</databaseChangeLog>

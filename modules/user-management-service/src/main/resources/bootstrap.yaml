@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: "userManagementService"
+  cloud:
+    zookeeper:
+      config:
+        enabled: true
+        root: configuration
+        defaultContext: defaultConfiguration
+        profileSeparator: ','
+      discovery:
+        enabled: true
+        register: true
+        root: "/services"

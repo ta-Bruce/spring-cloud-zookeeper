@@ -1,0 +1,1 @@
+package com.myproject.authorization.service.exception;

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+            http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet author="${user-management-author}" id="${user-management-changelog-id-prefix}1.0">
+        <createTable tableName="hibernate_sequences">
+            <column name="sequence_name" type="varchar(64)"></column>
+            <column name="next_val" type="bigint(20)"></column>
+        </createTable>
+        <createTable tableName="permissions">
+            <column name="id" type="bigint(20)" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="created_at" type="datetime" defaultValue="NULL">
+                <constraints nullable="true"/>
+            </column>
+            <column name="modified_at" type="datetime" defaultValue="NULL">
+                <constraints nullable="true"/>
+            </column>
+            <column name="name" type="varchar(32)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="roles">
+            <column name="id" type="bigint(20)" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="created_at" type="datetime" defaultValue="NULL">
+                <constraints nullable="true"/>
+            </column>
+            <column name="modified_at" type="datetime" defaultValue="NULL">
+                <constraints nullable="true"/>
+            </column>
+            <column name="name" type="varchar(32)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="users">
+            <column name="id" type="bigint(20)" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="created_at" type="datetime" defaultValue="NULL">
+                <constraints nullable="true"/>
+            </column>
+            <column name="modified_at" type="datetime" defaultValue="NULL">
+                <constraints nullable="true"/>
+            </column>
+            <column name="username" type="varchar(128)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="user_roles">
+            <column name="user_id" type="bigint(20)">
+                <constraints nullable="false" foreignKeyName="fk_user_roles_user" references="users(id)" />
+            </column>
+            <column name="role_id" type="bigint(20)">
+                <constraints nullable="false" foreignKeyName="fk_user_roles_role" references="roles(id)" />
+            </column>
+        </createTable>
+        <addUniqueConstraint
+                columnNames="user_id, role_id"
+                constraintName="pk_user_roles"
+                tableName="user_roles" />
+        <createTable tableName="role_permissions">
+            <column name="role_id" type="bigint(20)">
+                <constraints nullable="false" foreignKeyName="fk_role_permissions_role" references="roles(id)" />
+            </column>
+            <column name="permission_id" type="bigint(20)">
+                <constraints nullable="false" foreignKeyName="fk_role_permissions_permission" references="permissions(id)" />
+            </column>
+        </createTable>
+        <addUniqueConstraint
+                columnNames="role_id, permission_id"
+                constraintName="pk_role_permissions"
+                tableName="role_permissions" />
+    </changeSet>
+</databaseChangeLog>
